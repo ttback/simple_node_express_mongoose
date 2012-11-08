@@ -33,10 +33,11 @@ var App = function(){
 
   //returns all the parks in the collection
   self.routes['returnAllParks'] = function(req, res){
-    self.db.collection('parkpoints').find().toArray(function(err, names) {
+      self.Parkpoint.find().exec(function(err, names) {
+        if(err){throw err};
         res.header("Content-Type:","application/json");
         res.end(JSON.stringify(names));
-    });
+      });
   };
 
   //find a single park by passing in the objectID to the URL
