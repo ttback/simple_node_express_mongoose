@@ -2,7 +2,6 @@
 
 var express = require('express');
 var fs      = require('fs');
-var mongodb = require('mongodb');
 var mongoose = require('mongoose').set('debug', true);
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Types.ObjectId;
@@ -13,8 +12,6 @@ var App = function(){
   var self = this;
 
   // Setup
-  self.dbServer = new mongodb.Server(process.env.OPENSHIFT_NOSQL_DB_HOST,parseInt(process.env.OPENSHIFT_NOSQL_DB_PORT));
-  self.db = new mongodb.Db('parks', self.dbServer, {auto_reconnect: true, safe:true});
   self.dbUser = process.env.OPENSHIFT_NOSQL_DB_USERNAME;
   self.dbPass = process.env.OPENSHIFT_NOSQL_DB_PASSWORD;
   self.dbHost = process.env.OPENSHIFT_NOSQL_DB_HOST;
