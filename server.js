@@ -3,6 +3,8 @@
 var express = require('express');
 var fs      = require('fs');
 var mongodb = require('mongodb');
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var App = function(){
 
