@@ -5,6 +5,7 @@ var fs      = require('fs');
 var mongodb = require('mongodb');
 var mongoose = require('mongoose').set('debug', true);
 var Schema = mongoose.Schema;
+var ObjectId = mongoose.Types.ObjectId;
 
 var App = function(){
 
@@ -42,12 +43,17 @@ var App = function(){
 
   //find a single park by passing in the objectID to the URL
   self.routes['returnAPark'] = function(req, res){
-      var BSON = mongodb.BSONPure;
-      var parkObjectID = new BSON.ObjectID(req.params.id);
-      self.db.collection('parkpoints').find({'_id':parkObjectID}).toArray(function(err, names){
+    try{
+      var parkObjectID = new ObjectId(req.params.id);
+      self.Parkpoint.find({'_id':parkObjectID}).exec(function(err, names){
+              if(err){console.trace(err);};
               res.header("Content-Type:","application/json");
               res.end(JSON.stringify(names));
       });
+    }catch(err){
+      res.send("Error: "+err.message);
+      console.trace(err);
+    }
   };
 
 
