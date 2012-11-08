@@ -134,6 +134,7 @@ var App = function(){
   self.startServer = function(){
     self.app.listen(self.port, self.ipaddr, function(){
       console.log('%s: Node server started on %s:%d ...', Date(Date.now()), self.ipaddr, self.port);
+      console.log('Mongoose version: '+mongoose.version);
     });
   }
 
