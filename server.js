@@ -87,10 +87,19 @@ var App = function(){
      var lon = req.body.lon;
      console.log(req.body);
 
-     self.db.collection('parkpoints').insert({'Name' : name, 'pos' : [lon,lat ]}), function(result){
-         //we should have caught errors here for a real app
-         res.end('success');
-     };
+     var park = new self.Parkpoint({
+        Name: name, 
+        pos: [lon,lat]
+     });
+
+     park.save(function(error, result){
+       if(error){
+          res.send(error.message);
+       }
+       else{
+          res.end('success');
+       }
+     });
   };
 
 
