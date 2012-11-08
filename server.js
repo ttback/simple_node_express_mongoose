@@ -3,7 +3,7 @@
 var express = require('express');
 var fs      = require('fs');
 var mongodb = require('mongodb');
-var mongoose = require('mongoose');
+var mongoose = require('mongoose').set('debug', true);
 var Schema = mongoose.Schema;
 
 var App = function(){
@@ -13,7 +13,7 @@ var App = function(){
 
   // Setup
   self.dbServer = new mongodb.Server(process.env.OPENSHIFT_NOSQL_DB_HOST,parseInt(process.env.OPENSHIFT_NOSQL_DB_PORT));
-  self.db = new mongodb.Db('parks', self.dbServer, {auto_reconnect: true});
+  self.db = new mongodb.Db('parks', self.dbServer, {auto_reconnect: true, safe:true});
   self.dbUser = process.env.OPENSHIFT_NOSQL_DB_USERNAME;
   self.dbPass = process.env.OPENSHIFT_NOSQL_DB_PASSWORD;
   self.dbHost = process.env.OPENSHIFT_NOSQL_DB_HOST;
