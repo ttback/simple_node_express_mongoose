@@ -16,7 +16,8 @@ var App = function(){
   self.db = new mongodb.Db('parks', self.dbServer, {auto_reconnect: true});
   self.dbUser = process.env.OPENSHIFT_NOSQL_DB_USERNAME;
   self.dbPass = process.env.OPENSHIFT_NOSQL_DB_PASSWORD;
-
+  self.dbHost = process.env.OPENSHIFT_NOSQL_DB_HOST;
+  self.dbPort = parseInt(process.env.OPENSHIFT_NOSQL_DB_PORT);
   self.ipaddr  = process.env.OPENSHIFT_INTERNAL_IP;
   self.port    = parseInt(process.env.OPENSHIFT_INTERNAL_PORT) || 8080;
   if (typeof self.ipaddr === "undefined") {
@@ -112,12 +113,12 @@ var App = function(){
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
   self.connectDb = function(callback){
-    self.db.open(function(err, db){
-      if(err){ throw err };
-      self.db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
-        if(err){ throw err };
-        callback();
-      });
+    self.dbConn=mongoose.createConnection(self.dbHost, "parks", self.dbPort, {user:self.dbUser, pass:self.dbPass});
+    self.dbConn.on('error', function(err){throw err;});
+    self.dbConn.once('open', function(){
+      callback();
+      self.Parkpoint=self.dbConn.model('Parkpoint', 
+               new Schema({ Name: String, pos: [Number]})); 
     });
   };
   
