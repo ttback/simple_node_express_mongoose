@@ -63,7 +63,7 @@ var App = function(){
       var lat = parseFloat(req.query.lat);
       var lon = parseFloat(req.query.lon);
 
-      self.db.collection('parkpoints').find( {"pos" : {$near: [lon,lat]}}).toArray(function(err,names){
+      self.Parkpoint.find({"pos" : {$near: [lon,lat]}}).exec(function(err,names){
           res.header("Content-Type:","application/json");
           res.end(JSON.stringify(names));
        });
@@ -74,7 +74,7 @@ var App = function(){
       var lat = parseFloat(req.query.lat);
       var lon = parseFloat(req.query.lon);
       var name = req.params.name;
-      self.db.collection('parkpoints').find( {"Name" : {$regex : name, $options : 'i'}, "pos" : { $near : [lon,lat]}}).toArray(function(err,names){
+      self.Parkpoint.find({"Name" : {$regex : name, $options : 'i'}, "pos" : { $near : [lon,lat]}}).exec(function(err,names){
           res.header("Content-Type:","application/json");
           res.end(JSON.stringify(names));
       });
